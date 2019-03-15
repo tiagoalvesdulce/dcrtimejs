@@ -67,7 +67,7 @@ The 'result' key in the returned object means:
 | Param | Type                         | Description                                                    |
 | ----- | ---------------------------- | -------------------------------------------------------------- |
 | files | [<code>Files</code>](#Files) |                                                                |
-| id    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
+| id [optional]    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
 
 <a href="verify"></a>
 
@@ -86,5 +86,14 @@ The 'result' key in the returned object means:
 | Param | Type                         | Description                                                    |
 | ----- | ---------------------------- | -------------------------------------------------------------- |
 | files | [<code>Files</code>](#Files) |                                                                |
-| id    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
+| id [optional]    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
 
+### Usage
+
+```js
+import dcrtime from "dcrtimejs";
+
+dcrtime.setNetwork("testnet");
+dcrtime.timestamp([{ payload: "dGVzdA=="}], "dcrtimejs");
+dcrtime.verify([{ payload: "dGVzdA=="}], "dcrtimejs");
+```

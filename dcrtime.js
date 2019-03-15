@@ -93,7 +93,7 @@ export default (function () {
      * 1 | the file was already in the server. Timestamp failed.
      * @function timestamp
      * @param {Files} files
-     * @param {string} id Identifier that can be used if a unique identifier is required
+     * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<Object>} The data from dcrtime.
      */
     timestamp (files, id) {
@@ -117,7 +117,7 @@ export default (function () {
      * 2 | the file was NOT found in the server, which means it is not anchored
      * @function verify
      * @param {Files} files
-     * @param {string} id Identifier that can be used if a unique identifier is required
+     * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<Object>} The data from dcrtime.
      */
     verify (files, id) {

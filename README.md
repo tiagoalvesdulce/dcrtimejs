@@ -67,10 +67,10 @@ Timestamps an array of the format [{payload: SHA256}] using dcrtime.
 
 | Param         | Type                               | Description                                                    |
 | ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info--object) |                                                                |
+| info          | [<code>Info</code>](#info) |                                                                |
 | id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
 
-**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse--object">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### timestampFromBase64
 timestamp timestamps an array of the format [{payload: base64string}] using dcrtime.
@@ -78,10 +78,10 @@ timestamp timestamps an array of the format [{payload: base64string}] using dcrt
 
 | Param         | Type                               | Description                                                    |
 | ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info--object) |                                                                |
+| info          | [<code>Info</code>](#info) |                                                                |
 | id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
 
-**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse--object">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### verify
 
@@ -89,10 +89,10 @@ Verifies if an array of the format [{payload: SHA256}] is anchored to the blockc
 
 | Param         | Type                               | Description                                                    |
 | ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info--object) |                                                                |
+| info          | [<code>Info</code>](#info) |                                                                |
 | id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
 
-**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse--object">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### verifyFromBase64
 
@@ -100,10 +100,10 @@ Verifies if an array of the format [{payload base64string}] is anchored to the b
 
 | Param         | Type                               | Description                                                    |
 | ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info--object) |                                                                |
+| info          | [<code>Info</code>](#info) |                                                                |
 | id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
 
-**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse--object">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### Results
 

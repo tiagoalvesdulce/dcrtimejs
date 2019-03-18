@@ -8,7 +8,12 @@
 * [Docs](#files)
     * [setNetwork](#setNetwork)
     * [timestamp](#timestamp)
+    * [timestampFromBase64](#timestampFromBase64)
     * [verify](#verify)
+    * [verifyFromBase64](#verifyFromBase64)
+* [Results](#results)
+* [Usage](#usage)
+
 
 
 <a href="install"></a>
@@ -31,14 +36,25 @@ npm install --save dcrtimejs
 
 ## Docs
 
-<a href="files"></a>
+<a href="Info"></a>
 
-### Files : <code>Object</code>
+### Info : <code>object</code>
 **Properties**
 
-| Name    | Type                | Description          |
-| ------- | ------------------- | -------------------- |
-| payload | <code>string</code> | 64bit encoded string |
+| Name    | Type                | Description                    |
+| ------- | ------------------- | ------------------------------ |
+| payload | <code>string</code> | 64bit encoded string or SHA256 |
+
+<a href="dcrtimeResponse"></a>
+
+### DcrtimeResponse : <code>object</code>
+**Properties**
+
+| Name    | Type               | Description                                                        |
+| ------- | ------------------ | ------------------------------------------------------------------ |
+| digests | <code>array</code> | array of objects containing the SHA256, result and servertimestamp |
+
+___
 
 <a href="setNetwork"></a>
 
@@ -50,43 +66,80 @@ Default is mainnet. If network is "testnet", it will be set to testnet instead.
 | ------- | ------------------- |
 | network | <code>string</code> |
 
+___
+
 <a href="timestamp"></a>
 
-### timestamp(files, id) ⇒ <code>Promise.&lt;Object&gt;</code>
-timestamp timestamps an array of files using dcrtime.
+### timestamp(info, id) ⇒ <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code>
+Timestamps an array of the format [{payload: SHA256}] using dcrtime.
 
-The 'result' key in the returned object means:
 
-| Result | Description                                                 |
-| ------ | ----------------------------------------------------------- |
-| 0      | the file was not found in the server. Timestamp successful. |
-| 1      | the file was already in the server. Timestamp failed.       |
+| Param         | Type                        | Description                                                    |
+| ------------- | --------------------------- | -------------------------------------------------------------- |
+| info          | [<code>Info</code>](#Info) |                                                                |
+| id [optional] | <code>string</code>         | Identifier that can be used if a unique identifier is required |
 
-**Returns**: <code>Promise.&lt;Object&gt;</code> - The data from dcrtime.
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+___
 
-| Param | Type                         | Description                                                    |
-| ----- | ---------------------------- | -------------------------------------------------------------- |
-| files | [<code>Files</code>](#Files) |                                                                |
-| id [optional]    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
+<a href="timestampFromBase64"></a>
+
+### timestampFromBase64(info, id) ⇒ <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code>
+timestamp timestamps an array of the format [{payload: base64string}] using dcrtime.
+
+
+| Param         | Type                        | Description                                                    |
+| ------------- | --------------------------- | -------------------------------------------------------------- |
+| info          | [<code>Info</code>](#Info) |                                                                |
+| id [optional] | <code>string</code>         | Identifier that can be used if a unique identifier is required |
+
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+
+___
 
 <a href="verify"></a>
 
-### verify(files, id) ⇒ <code>Promise.&lt;Object&gt;</code>
-verify verifies if an array of files is anchored to the blockchain.
+### verify(info, id) ⇒ <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code>
+Verifies if an array of the format [{payload: SHA256}] is anchored to the blockchain.
+
+| Param         | Type                        | Description                                                    |
+| ------------- | --------------------------- | -------------------------------------------------------------- |
+| info          | [<code>Info</code>](#Info) |                                                                |
+| id [optional] | <code>string</code>         | Identifier that can be used if a unique identifier is required |
+
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+
+___
+
+<a href="verifyFromBase64"></a>
+
+### verifyFromBase64(info, id) ⇒ <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code>
+Verifies if an array of the format [{payload base64string}] is anchored to the blockchain.
+
+| Param         | Type                        | Description                                                    |
+| ------------- | --------------------------- | -------------------------------------------------------------- |
+| info          | [<code>Info</code>](#Info) |                                                                |
+| id [optional] | <code>string</code>         | Identifier that can be used if a unique identifier is required |
+
+**Returns**: <code>Promise.&lt;<a href="#dcrtimeResponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+
+___
+
+<a href="results"></a>
+
+### Results
 
 The 'result' key in the returned object means:
 
 | Result | Description                                                           |
 | ------ | --------------------------------------------------------------------- |
-| 0      | the file was found in the server and verified successfully.           |
+| 0      | Success.                                                              |
+| 1      | the file was already in the server. Timestamp failed.                 |
 | 2      | the file was NOT found in the server, which means it is not anchored. |
 
-**Returns**: <code>Promise.&lt;Object&gt;</code> - The data from dcrtime.
+___
 
-| Param | Type                         | Description                                                    |
-| ----- | ---------------------------- | -------------------------------------------------------------- |
-| files | [<code>Files</code>](#Files) |                                                                |
-| id [optional]    | <code>string</code>          | Identifier that can be used if a unique identifier is required |
+<a href="usage"></a>
 
 ### Usage
 
@@ -94,6 +147,8 @@ The 'result' key in the returned object means:
 import dcrtime from "dcrtimejs";
 
 dcrtime.setNetwork("testnet");
-dcrtime.timestamp([{ payload: "dGVzdA=="}], "dcrtimejs");
-dcrtime.verify([{ payload: "dGVzdA=="}], "dcrtimejs");
+dcrtime.timestamp([{ payload: "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"}], "dcrtimejs");
+dcrtime.timestampFromBase64([{ payload: "dGVzdA=="}], "dcrtimejs");
+dcrtime.verify([{ payload: "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"}], "dcrtimejs");
+dcrtime.verifyFromBase64([{ payload: "dGVzdA=="}], "dcrtimejs");
 ```

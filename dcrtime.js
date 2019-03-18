@@ -4,8 +4,11 @@ import CryptoJS from "crypto-js";
 import fetch from "node-fetch";
 
 /**
- * @typedef {Object} Files
- * @property {string} payload 64bit encoded string
+ * @typedef {Object} Info
+ * @property {string} payload
+ * @typedef {Object} DcrtimeResponse
+ * @property {array} digests
+ * @property {string} id
  */
 
 export default (function () {
@@ -30,6 +33,15 @@ export default (function () {
       throw err;
     }
   };
+
+  const mergeResultsAndDigests = ({ results, digests, servertimestamp, ...obj }) => {
+    return obj.error ? obj : {
+      ...obj,
+      digests: digests && digests.map((digest, i) => ({ digest: digest, result: results[i], servertimestamp }))
+    };
+  };
+
+  const removeTimestampsKey = ({ timestamps, ...obj }) => obj;
 
   /**
    * base64ToArrayBuffer converts a base64 to an ArrayBuffer
@@ -84,7 +96,7 @@ export default (function () {
       apiBase = network === "testnet" && "https://time-testnet.decred.org:59152";
     },
     /**
-     * timestamp timestamps an array of files using dcrtime.
+     * timestamp timestamps an array of the format [{payload: SHA256}] using dcrtime.
      *
      * The 'result' key in the returned object means:
      *
@@ -92,23 +104,47 @@ export default (function () {
      *
      * 1 | the file was already in the server. Timestamp failed.
      * @function timestamp
-     * @param {Files} files
+     * @param {Info} info
      * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
-     * @return {Promise<Object>} The data from dcrtime.
+     * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    timestamp (files, id) {
+    async timestamp (info, id) {
       try {
-        return post("timestamp/", {
+        const res = await post("timestamp/", {
           id,
-          digests: files.map(file =>
-            digestPayload(file.payload))
+          digests: info.map(digest => digest.payload)
         });
+        return mergeResultsAndDigests(res);
       } catch (err) {
         return err;
       }
     },
     /**
-     * verify verifies if an array of files is anchored to the blockchain.
+     * timestampFromBase64 timestamps an array of the format [{payload: base64string}] using dcrtime.
+     *
+     * The 'result' key in the returned object means:
+     *
+     * 0 | the file was not found in the server. Timestamp successful.
+     *
+     * 1 | the file was already in the server. Timestamp failed.
+     * @function timestamp
+     * @param {Info} info
+     * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
+     * @return {Promise<DcrtimeResponse>} The data from dcrtime.
+     */
+    async timestampFromBase64 (info, id) {
+      try {
+        const res = await post("timestamp/", {
+          id,
+          digests: info.map(s => digestPayload(s.payload))
+        });
+        return mergeResultsAndDigests(res);
+      } catch (err) {
+        return err;
+      }
+    },
+    /**
+     * verify verifies if an array of the format [{payload: SHA256}] is anchored to the blockchain.
      *
      * The 'result' key in the returned object means:
      *
@@ -116,23 +152,44 @@ export default (function () {
      *
      * 2 | the file was NOT found in the server, which means it is not anchored
      * @function verify
-     * @param {Files} files
+     * @param {Info} info
      * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
-     * @return {Promise<Object>} The data from dcrtime.
+     * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    verify (files, id) {
+    async verify (info, id) {
       try {
-        return post("verify/", {
+        const res = await post("verify/", {
           id,
-          digests: files.map(file =>
-            digestPayload(file.payload))
+          digests: info.map(digest => digest.payload)
         });
+        return removeTimestampsKey(res);
       } catch (err) {
         return err;
       }
     },
-    fileIsVerified ({ result }) {
-      return result !== 2;
+    /**
+     * verifyFromBase64 verifies if an array of the format [{payload: base64string}] is anchored to the blockchain.
+     *
+     * The 'result' key in the returned object means:
+     *
+     * 0 | the file was found in the server and verified successfully.
+     *
+     * 2 | the file was NOT found in the server, which means it is not anchored
+     * @function verify
+     * @param {Info} info
+     * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
+     * @return {Promise<DcrtimeResponse>} The data from dcrtime.
+     */
+    async verifyFromBase64 (info, id) {
+      try {
+        const res = await post("verify/", {
+          id,
+          digests: info.map(s => digestPayload(s.payload))
+        });
+        return removeTimestampsKey(res);
+      } catch (err) {
+        return err;
+      }
     }
   };
 })();

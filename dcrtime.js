@@ -93,7 +93,7 @@ export default (function () {
      * @param {string} network
      */
     setNetwork (network) {
-      apiBase = network === "testnet" && "https://time-testnet.decred.org:59152";
+      apiBase = network === "testnet" ? "https://time-testnet.decred.org:59152" : "https://time.decred.org:49152";
     },
     /**
      * timestamp timestamps an array of the format [{payload: SHA256}] using dcrtime.

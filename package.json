@@ -1,6 +1,6 @@
 {
   "name": "dcrtimejs",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "javascript library for dcrtime",
   "main": "dcrtime.js",
   "author": "tiagoalvesdulce",
@@ -9,6 +9,9 @@
     "start": "node -r esm dcrtime.js",
     "test": "mocha -r esm test/*.test.js"
   },
+  "files": [
+    "dcrtime.js"
+  ],
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^5.15.1",

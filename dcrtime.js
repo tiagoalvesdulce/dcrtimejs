@@ -84,11 +84,11 @@ export default (function () {
       apiBase = network === "testnet" ? "https://time-testnet.decred.org:59152" : "https://time.decred.org:49152";
     },
     /**
-     * digestPayload transforms a 64bit payload into a SHA256 digest string
+     * getSHA256fromBase64 calculates the SHA256 hash of a 64bit encoded string
      * @param {string} payload 64 bit string
-     * @return {string} SHA256 digest
+     * @return {string} SHA256 hash
      */
-    digestPayload (payload) {
+    getSHA256fromBase64 (payload) {
       return CryptoJS.SHA256(
         arrayBufferToWordArray(base64ToArrayBuffer(payload))
       ).toString(CryptoJS.enc.Hex);
@@ -134,7 +134,7 @@ export default (function () {
       try {
         const res = await post("timestamp/", {
           id,
-          digests: base64s.map(b => this.digestPayload(b))
+          digests: base64s.map(b => this.getSHA256fromBase64(b))
         });
         return mergeResultsAndDigests(res);
       } catch (err) {
@@ -182,7 +182,7 @@ export default (function () {
       try {
         const res = await post("verify/", {
           id,
-          digests: base64s.map(b => this.digestPayload(b))
+          digests: base64s.map(b => this.getSHA256fromBase64(b))
         });
         return removeTimestampsKey(res);
       } catch (err) {

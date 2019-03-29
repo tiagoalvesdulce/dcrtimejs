@@ -16,6 +16,7 @@
     - [timestampFromBase64](#timestampfrombase64)
     - [verify](#verify)
     - [verifyFromBase64](#verifyfrombase64)
+    - [getSHA256fromBase64](#getsha256frombase64)
     - [Results](#results)
     - [Usage](#usage)
 
@@ -96,6 +97,15 @@ Verifies if an array of base 64 encoded strings is anchored to the blockchain.
 | id [optional] | <code>string</code>        | Identifier that can be used if a unique identifier is required |
 
 **Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
+
+### getSHA256fromBase64
+Calculates the SHA256 hash of a 64bit encoded string
+
+| Param  | Type                | Description           |
+| ------ | ------------------- | --------------------- |
+| base64 | <code>string</code> | base64 encoded string |
+
+**Returns**: <code>string</code> - The SHA256 hash.
 
 ### Results
 

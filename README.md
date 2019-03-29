@@ -10,7 +10,6 @@
       - [yarn](#yarn)
       - [npm](#npm)
   - [Docs](#docs)
-    - [Info](#info)
     - [DcrtimeResponse](#dcrtimeresponse)
     - [setNetwork](#setnetwork)
     - [timestamp](#timestamp)
@@ -39,13 +38,6 @@ npm install --save dcrtimejs
 
 ## Docs
 
-### Info
-**Properties**
-
-| Name    | Type                | Description                    |
-| ------- | ------------------- | ------------------------------ |
-| payload | <code>string</code> | 64bit encoded string or SHA256 |
-
 ### DcrtimeResponse
 **Properties**
 
@@ -62,46 +54,46 @@ Default is mainnet. If network is "testnet", it will be set to testnet instead.
 | network | <code>string</code> |
 
 ### timestamp
-Timestamps an array of the format [{payload: SHA256}] using dcrtime.
+Timestamps an array of SHA256 hashs using dcrtime.
 
 
-| Param         | Type                               | Description                                                    |
-| ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info) |                                                                |
-| id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
+| Param         | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| digests       | <code>Array[string]</code> | Array of SHA256 hashs                                          |
+| id [optional] | <code>string</code>        | Identifier that can be used if a unique identifier is required |
 
 **Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### timestampFromBase64
-timestamp timestamps an array of the format [{payload: base64string}] using dcrtime.
+Timestamps an array of base 64 encoded strings using dcrtime.
 
 
-| Param         | Type                               | Description                                                    |
-| ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info) |                                                                |
-| id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
+| Param         | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| base64s       | <code>Array[string]</code> | Array of base64 encoded strings                                |
+| id [optional] | <code>string</code>        | Identifier that can be used if a unique identifier is required |
 
 **Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### verify
 
-Verifies if an array of the format [{payload: SHA256}] is anchored to the blockchain.
+Verifies if an array of SHA256 hashs is anchored to the blockchain.
 
-| Param         | Type                               | Description                                                    |
-| ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info) |                                                                |
-| id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
+| Param         | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| digests       | <code>Array[string]</code> | Array of SHA256 hashs                                          |
+| id [optional] | <code>string</code>        | Identifier that can be used if a unique identifier is required |
 
 **Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
 ### verifyFromBase64
 
-Verifies if an array of the format [{payload base64string}] is anchored to the blockchain.
+Verifies if an array of base 64 encoded strings is anchored to the blockchain.
 
-| Param         | Type                               | Description                                                    |
-| ------------- | ---------------------------------- | -------------------------------------------------------------- |
-| info          | [<code>Info</code>](#info) |                                                                |
-| id [optional] | <code>string</code>                | Identifier that can be used if a unique identifier is required |
+| Param         | Type                       | Description                                                    |
+| ------------- | -------------------------- | -------------------------------------------------------------- |
+| base64s       | <code>Array[string]</code> | Array of base64 encoded strings                                |
+| id [optional] | <code>string</code>        | Identifier that can be used if a unique identifier is required |
 
 **Returns**: <code>Promise.&lt;<a href="#dcrtimeresponse">DcrtimeResponse</a>&gt;</code> - The data from dcrtime.
 
@@ -121,8 +113,8 @@ The 'result' key in the returned object means:
 import dcrtime from "dcrtimejs";
 
 dcrtime.setNetwork("testnet");
-dcrtime.timestamp([{ payload: "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"}], "dcrtimejs");
-dcrtime.timestampFromBase64([{ payload: "dGVzdA=="}], "dcrtimejs");
-dcrtime.verify([{ payload: "9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"}], "dcrtimejs");
-dcrtime.verifyFromBase64([{ payload: "dGVzdA=="}], "dcrtimejs");
+dcrtime.timestamp(["9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"], "dcrtimejs");
+dcrtime.timestampFromBase64(["dGVzdA=="], "dcrtimejs");
+dcrtime.verify(["9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08"], "dcrtimejs");
+dcrtime.verifyFromBase64(["dGVzdA=="], "dcrtimejs");
 ```

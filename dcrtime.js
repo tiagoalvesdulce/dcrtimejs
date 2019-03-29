@@ -4,8 +4,6 @@ import CryptoJS from "crypto-js";
 import fetch from "node-fetch";
 
 /**
- * @typedef {Object} Info
- * @property {string} payload
  * @typedef {Object} DcrtimeResponse
  * @property {array} digests
  * @property {string} id
@@ -75,16 +73,6 @@ export default (function () {
     return CryptoJS.lib.WordArray.create(a, i8a.length);
   };
 
-  /**
-   * digestPayload transforms a 64bit payload into a SHA256 digest string
-   * @param {string} payload 64 bit string
-   * @return {string} SHA256 digest
-   */
-  const digestPayload = payload =>
-    CryptoJS.SHA256(
-      arrayBufferToWordArray(base64ToArrayBuffer(payload))
-    ).toString(CryptoJS.enc.Hex);
-
   return {
     /**
      * setNetwork sets the dcrtime server that will be used.
@@ -96,6 +84,16 @@ export default (function () {
       apiBase = network === "testnet" ? "https://time-testnet.decred.org:59152" : "https://time.decred.org:49152";
     },
     /**
+     * digestPayload transforms a 64bit payload into a SHA256 digest string
+     * @param {string} payload 64 bit string
+     * @return {string} SHA256 digest
+     */
+    digestPayload (payload) {
+      return CryptoJS.SHA256(
+        arrayBufferToWordArray(base64ToArrayBuffer(payload))
+      ).toString(CryptoJS.enc.Hex);
+    },
+    /**
      * timestamp timestamps an array of the format [{payload: SHA256}] using dcrtime.
      *
      * The 'result' key in the returned object means:
@@ -104,15 +102,15 @@ export default (function () {
      *
      * 1 | the file was already in the server. Timestamp failed.
      * @function timestamp
-     * @param {Info} info
+     * @param {array} digests
      * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async timestamp (info, id) {
+    async timestamp (digests, id) {
       try {
         const res = await post("timestamp/", {
           id,
-          digests: info.map(digest => digest.payload)
+          digests
         });
         return mergeResultsAndDigests(res);
       } catch (err) {
@@ -127,16 +125,16 @@ export default (function () {
      * 0 | the file was not found in the server. Timestamp successful.
      *
      * 1 | the file was already in the server. Timestamp failed.
-     * @function timestamp
-     * @param {Info} info
+     * @function timestampFromBase64
+     * @param {array} base64s
      * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async timestampFromBase64 (info, id) {
+    async timestampFromBase64 (base64s, id) {
       try {
         const res = await post("timestamp/", {
           id,
-          digests: info.map(s => digestPayload(s.payload))
+          digests: base64s.map(b => this.digestPayload(b))
         });
         return mergeResultsAndDigests(res);
       } catch (err) {
@@ -152,15 +150,15 @@ export default (function () {
      *
      * 2 | the file was NOT found in the server, which means it is not anchored
      * @function verify
-     * @param {Info} info
+     * @param {array} digests
      * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async verify (info, id) {
+    async verify (digests, id) {
       try {
         const res = await post("verify/", {
           id,
-          digests: info.map(digest => digest.payload)
+          digests
         });
         return removeTimestampsKey(res);
       } catch (err) {
@@ -175,16 +173,16 @@ export default (function () {
      * 0 | the file was found in the server and verified successfully.
      *
      * 2 | the file was NOT found in the server, which means it is not anchored
-     * @function verify
-     * @param {Info} info
+     * @function verifyFromBase64
+     * @param {array} base64s
      * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async verifyFromBase64 (info, id) {
+    async verifyFromBase64 (base64s, id) {
       try {
         const res = await post("verify/", {
           id,
-          digests: info.map(s => digestPayload(s.payload))
+          digests: base64s.map(b => this.digestPayload(b))
         });
         return removeTimestampsKey(res);
       } catch (err) {

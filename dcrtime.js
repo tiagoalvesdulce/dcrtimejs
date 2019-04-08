@@ -32,6 +32,11 @@ export default (function () {
     }
   };
 
+  const convertToSHA256 = (payload) =>
+    CryptoJS.SHA256(
+      arrayBufferToWordArray(base64ToArrayBuffer(payload))
+    ).toString(CryptoJS.enc.Hex);
+
   const mergeResultsAndDigests = ({ results, digests, servertimestamp, ...obj }) => {
     return obj.error ? obj : {
       ...obj,
@@ -89,9 +94,7 @@ export default (function () {
      * @return {string} SHA256 hash
      */
     getSHA256fromBase64 (payload) {
-      return CryptoJS.SHA256(
-        arrayBufferToWordArray(base64ToArrayBuffer(payload))
-      ).toString(CryptoJS.enc.Hex);
+      return convertToSHA256(payload);
     },
     /**
      * timestamp timestamps an array of the format [{payload: SHA256}] using dcrtime.
@@ -134,7 +137,7 @@ export default (function () {
       try {
         const res = await post("timestamp/", {
           id,
-          digests: base64s.map(b => this.getSHA256fromBase64(b))
+          digests: base64s.map(b => convertToSHA256(b))
         });
         return mergeResultsAndDigests(res);
       } catch (err) {
@@ -182,7 +185,7 @@ export default (function () {
       try {
         const res = await post("verify/", {
           id,
-          digests: base64s.map(b => this.getSHA256fromBase64(b))
+          digests: base64s.map(b => convertToSHA256(b))
         });
         return removeTimestampsKey(res);
       } catch (err) {

@@ -1,6 +1,6 @@
 {
   "name": "dcrtimejs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "javascript library for dcrtime",
   "main": "dcrtime.js",
   "author": "tiagoalvesdulce",

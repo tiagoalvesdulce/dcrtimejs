@@ -12,7 +12,7 @@ import fetch from "node-fetch";
 export default (function () {
   let apiBase = "https://time.decred.org:49152";
 
-  const getUrl = (path, version = "v1") => `${apiBase}/${version}/${path}`;
+  const getUrl = (path, version = "v2") => `${apiBase}/${version}/${path}`;
 
   const post = async (path, json) => {
     try {
@@ -111,7 +111,7 @@ export default (function () {
      */
     async timestamp (digests, id) {
       try {
-        const res = await post("timestamp/", {
+        const res = await post("timestamp/batch", {
           id,
           digests
         });
@@ -135,7 +135,7 @@ export default (function () {
      */
     async timestampFromBase64 (base64s, id) {
       try {
-        const res = await post("timestamp/", {
+        const res = await post("timestamp/batch", {
           id,
           digests: base64s.map(b => convertToSHA256(b))
         });
@@ -159,7 +159,7 @@ export default (function () {
      */
     async verify (digests, id) {
       try {
-        const res = await post("verify/", {
+        const res = await post("verify/batch", {
           id,
           digests
         });
@@ -183,7 +183,7 @@ export default (function () {
      */
     async verifyFromBase64 (base64s, id) {
       try {
-        const res = await post("verify/", {
+        const res = await post("verify/batch", {
           id,
           digests: base64s.map(b => convertToSHA256(b))
         });

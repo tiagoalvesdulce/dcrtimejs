@@ -37,11 +37,24 @@ export default (function () {
       arrayBufferToWordArray(base64ToArrayBuffer(payload))
     ).toString(CryptoJS.enc.Hex);
 
-  const mergeResultsAndDigests = ({ results, digests, servertimestamp, ...obj }) => {
-    return obj.error ? obj : {
-      ...obj,
-      digests: digests && digests.map((digest, i) => ({ digest: digest, result: results[i], servertimestamp }))
-    };
+  const mergeResultsAndDigests = ({
+    results,
+    digests,
+    servertimestamp,
+    ...obj
+  }) => {
+    return obj.error
+      ? obj
+      : {
+          ...obj,
+          digests:
+            digests &&
+            digests.map((digest, i) => ({
+              digest: digest,
+              result: results[i],
+              servertimestamp
+            }))
+        };
   };
 
   const removeTimestampsKey = ({ timestamps, ...obj }) => obj;
@@ -51,7 +64,7 @@ export default (function () {
    * @param {string} base64 Base 64 string
    * @return {ArrayBuffer} Array of unsigned 8 bit integers
    */
-  const base64ToArrayBuffer = base64 => {
+  const base64ToArrayBuffer = (base64) => {
     const buf = Buffer.from(base64, "base64");
     const binaryString = buf.toString("binary");
     const len = binaryString.length;
@@ -67,7 +80,7 @@ export default (function () {
    * @param {ArrayBuffer} ab Array of unsigned 8 bit integers
    * @return {WordArray} Array of 32 bit integers
    */
-  const arrayBufferToWordArray = ab => {
+  const arrayBufferToWordArray = (ab) => {
     const i8a = new Uint8Array(ab);
     const a = [];
     for (let i = 0; i < i8a.length; i += 4) {
@@ -85,15 +98,18 @@ export default (function () {
      * @function setNetwork
      * @param {string} network
      */
-    setNetwork (network) {
-      apiBase = network === "testnet" ? "https://time-testnet.decred.org:59152" : "https://time.decred.org:49152";
+    setNetwork(network) {
+      apiBase =
+        network === "testnet"
+          ? "https://time-testnet.decred.org:59152"
+          : "https://time.decred.org:49152";
     },
     /**
      * getSHA256fromBase64 calculates the SHA256 hash of a 64bit encoded string
      * @param {string} payload 64 bit string
      * @return {string} SHA256 hash
      */
-    getSHA256fromBase64 (payload) {
+    getSHA256fromBase64(payload) {
       return convertToSHA256(payload);
     },
     /**
@@ -109,7 +125,7 @@ export default (function () {
      * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async timestamp (digests, id) {
+    async timestamp(digests, id) {
       try {
         const res = await post("timestamp/batch", {
           id,
@@ -133,11 +149,11 @@ export default (function () {
      * @param {string} [id] *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async timestampFromBase64 (base64s, id) {
+    async timestampFromBase64(base64s, id) {
       try {
         const res = await post("timestamp/batch", {
           id,
-          digests: base64s.map(b => convertToSHA256(b))
+          digests: base64s.map((b) => convertToSHA256(b))
         });
         return mergeResultsAndDigests(res);
       } catch (err) {
@@ -157,7 +173,7 @@ export default (function () {
      * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async verify (digests, id) {
+    async verify(digests, id) {
       try {
         const res = await post("verify/batch", {
           id,
@@ -181,11 +197,11 @@ export default (function () {
      * @param {string} id *Optional. Identifier that can be used if a unique identifier is required
      * @return {Promise<DcrtimeResponse>} The data from dcrtime.
      */
-    async verifyFromBase64 (base64s, id) {
+    async verifyFromBase64(base64s, id) {
       try {
         const res = await post("verify/batch", {
           id,
-          digests: base64s.map(b => convertToSHA256(b))
+          digests: base64s.map((b) => convertToSHA256(b))
         });
         return removeTimestampsKey(res);
       } catch (err) {

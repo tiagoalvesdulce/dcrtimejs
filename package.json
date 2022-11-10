@@ -1,36 +1,42 @@
 {
   "name": "dcrtimejs",
-  "version": "0.0.6",
-  "description": "javascript library for dcrtime",
-  "main": "dcrtime.js",
+  "version": "1.0.0",
+  "description": "javascript wrapper for dcrtime",
+  "main": "src/dcrtime.js",
   "author": "tiagoalvesdulce",
   "license": "MIT",
+  "type": "module",
+  "browser": {
+    "buffer": false
+  },
+  "exports": {
+    ".": "./src/dcrtime.js",
+    "./utils": "./src/utils.js"
+  },
   "scripts": {
-    "start": "node -r esm dcrtime.js",
-    "test": "mocha -r esm test/*.test.js"
+    "start": "node src/*.js",
+    "lint": "eslint src/*.js",
+    "lint:fix": "eslint src/*.js test/*.js --fix",
+    "test": "./node_modules/mocha/bin/mocha.js -r esm test/*.test.js"
   },
   "files": [
-    "dcrtime.js"
+    "src/dcrtime.js",
+    "src/utils.js"
   ],
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-config-standard": "^14.1.0",
+    "chai": "^4.3.6",
+    "eslint": "^8.26.0",
+    "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-n": "^15.4.0",
+    "eslint-plugin-promise": "^6.1.1",
     "esm": "^3.2.25",
-    "mocha": "^6.2.2",
-    "prettier": "^1.18.2"
+    "mocha": "^10.1.0"
   },
   "peerDependencies": {
-    "crypto-js": "^3.1.9-1"
+    "crypto-js": "^4.1.1"
   },
   "dependencies": {
-    "crypto-js": "^3.1.9-1",
-    "node-fetch": "^2.6.0"
+    "crypto-js": "^4.1.1"
   }
 }

@@ -14,10 +14,12 @@
     - [StatusResponse](#statusresponse)
     - [VersionsResponse](#versionsresponse)
     - [LastAnchorResponse](#lastanchorresponse)
+    - [GetLastDigestsResponse](#getlastdigestsresponse)
     - [setNetwork](#setnetwork)
     - [getVersions](#getversions)
     - [getLastAnchor](#getlastanchor)
-    - [getStatus()](#getstatus)
+    - [getLastDigests](#getlastdigests)
+    - [getStatus](#getstatus)
     - [timestamp](#timestamp)
     - [timestampFromBase64](#timestampfrombase64)
     - [Timestamp Results](#timestamp-results)
@@ -79,6 +81,13 @@ npm install --save dcrtimejs
 | blockhash | <code>String</code> | block hash |
 | blockheight | <code>Number</code> | block height |
 
+### GetLastDigestsResponse
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| digests | <code>array</code> | array of objects containing the SHA256, result, servertimestamp and chaininformation if applicable |
+
 ### setNetwork
 Sets the dcrtime server that will be used.
 Default is mainnet. If network is "testnet", it will be set to testnet.
@@ -98,7 +107,12 @@ getLastAnchor returns the last successful anchor info request
 
 **Returns**: <code>Promise.&lt;<a href="#lastanchorresponse">LastAnchorResponse</a>&gt;</code> - A promise that returns <a href="#lastanchorresponse">LastAnchorResponse</a> if resolved
 
-### getStatus()
+### getLastDigests
+getLastAnchor returns the last n digests submitted
+
+**Returns**: <code>Promise.&lt;<a href="#getlastdigestsresponse">GetLastDigestsResponse</a>&gt;</code> - A promise that returns <a href="#getlastdigestsresponse">GetLastDigestsResponse</a> if resolved
+
+### getStatus
 getStatus is used to ask the server if everything is running properly.
 
 **Returns**: <code>Promise.&lt;<a href="#statusresponse">StatusResponse</a>&gt;</code> - A promise that returns <a href="#statusresponse">StatusResponse</a> if resolved

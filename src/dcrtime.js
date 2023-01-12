@@ -44,6 +44,11 @@ import { convertToSHA256, mergeResultsAndDigests, removeTimestampsKey } from "./
  * @property {String} blockhash block hash
  * @property {Number} blockheight block height
  */
+/**
+ * @typedef {Object} GetLastDigestResponse
+ * @property {VerifyDigestObject[]} digests
+ */
+
 export default (function () {
   let apiBase = "https://time.decred.org:49152"; // Default is mainnet
 
@@ -203,6 +208,17 @@ export default (function () {
         digests: base64s.map((b) => convertToSHA256(b))
       });
       return removeTimestampsKey(res);
+    },
+    /**
+     * getLastDigests is used to ask the server the last n digests submitted.
+     * @async
+     * @param {number} [n] *Optional. Number of digests to get. Default is 10
+     * @return {Promise<GetLastDigestResponse>} A promise that returns {@link GetLastDigestResponse} if resolved
+     */
+    async getLastDigests (n = 10) {
+      return await post("last-digests", {
+        number: n
+      });
     }
   };
 })();
